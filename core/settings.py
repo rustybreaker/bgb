@@ -91,3 +91,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Chave primária default
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+
+ALLOWED_HOSTS = ['*']  # ou o domínio específico do Render
+
+# Render.com exige que STATIC_ROOT esteja definido
+if os.getenv('RENDER') == 'true':
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
