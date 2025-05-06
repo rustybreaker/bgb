@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+    background: linear-gradient(to bottom, #fef9f9, #ffe3e3);
+    color: #333;
+    text-align: center;
+    padding: 30px;
+    margin: 0;
+  }
+  
+  .container {
+    margin-top: 100px;
+  }
+  
+  h1, h2 {
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    margin: 20px 0;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff7096;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #e8587f;
+  }
+  
+  audio {
+    margin-top: 20px;
+  }
+  
