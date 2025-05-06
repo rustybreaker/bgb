@@ -1,109 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-{% load static %}
 <head>
-  <meta charset="UTF-8">
-  <title>Feliz Aniversário, Bia! 🎉</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surpresa para Bia 🎁</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
+      margin: 0;
       font-family: sans-serif;
-      color: white;
+      background: linear-gradient(to bottom, #fff0f5, #ffe3e3);
       overflow: hidden;
-      position: relative;
-    }
-
-    video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 100vw;
-      min-height: 100vh;
-      object-fit: cover;
-      z-index: -2;
-    }
-
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .content {
-      position: relative;
-      z-index: 1;
       text-align: center;
+    }
+
+    #video-fundo, #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      display: none;
+      object-fit: cover;
+    }
+
+    .presente {
       margin-top: 20vh;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 10px black;
+    .presente img {
+      width: 200px;
+      transition: transform 0.8s ease;
     }
 
-    button {
-      padding: 12px 24px;
+    #botao-abrir, #botao-jornada {
+      padding: 15px 25px;
       font-size: 18px;
       background-color: #ff5fa2;
+      color: white;
       border: none;
       border-radius: 10px;
-      color: white;
       cursor: pointer;
-      transition: 0.3s;
+      margin-top: 20px;
     }
 
-    button:hover {
-      background-color: #e14687;
+    #botao-jornada {
+      display: none;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 2.2em;
     }
   </style>
 </head>
 <body>
+
   <!-- 🎥 Vídeo de fundo -->
-  <video autoplay muted loop>
+  <video id="video-fundo" autoplay loop muted playsinline>
     <source src="{% static 'video_dance.mp4' %}" type="video/mp4">
-    Seu navegador não suporta vídeo.
   </video>
 
-  <!-- 🎉 Canvas de confetes -->
+  <!-- 🎉 Confete -->
   <canvas id="confetti-canvas"></canvas>
 
   <!-- 🎵 Música -->
-  <audio autoplay loop>
+  <audio id="musica" loop>
     <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
-    Seu navegador não suporta áudio.
   </audio>
 
-  <!-- Conteúdo principal -->
-  <div class="content">
-    <h1>Feliz Aniversário, Bia! 🎂</h1>
-    <a href="/quiz"><button>Começar nossa jornada</button></a>
+  <!-- 🎁 Caixa de presente -->
+  <div class="presente" id="presente">
+    <img src="{% static 'caixa_presente.png' %}" alt="Presente">
+    <br />
+    <button id="botao-abrir" onclick="abrirPresente()">Abrir presente 🎁</button>
   </div>
 
-  <!-- Confetti.js (CDN) -->
+  <h1 id="mensagem" style="display: none;">Feliz Aniversário, Bia! 🎂</h1>
+  <button id="botao-jornada" onclick="irParaJornada()">Começar nossa jornada</button>
+
+  <!-- Confetti.js -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <script>
-    const canvas = document.getElementById('confetti-canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    function abrirPresente() {
+      const presente = document.getElementById('presente');
+      const video = document.getElementById('video-fundo');
+      const musica = document.getElementById('musica');
+      const confettiCanvas = document.getElementById('confetti-canvas');
+      const mensagem = document.getElementById('mensagem');
+      const botaoJornada = document.getElementById('botao-jornada');
 
-    const confetti = confetti.create(canvas, { resize: true, useWorker: true });
+      // Esconde a caixa de presente inteira
+      presente.style.display = 'none';
 
-    setInterval(() => {
+      // Ativar vídeo e música
+      video.style.display = 'block';
+      confettiCanvas.style.display = 'block';
+      musica.play();
+
+      // Confete contínuo
+      const confetti = window.confetti.create(confettiCanvas, { resize: true });
       confetti({
         particleCount: 100,
-        spread: 70,
+        spread: 80,
         origin: { y: 0.6 }
       });
-    }, 1500);
+      setInterval(() => {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.4 }
+        });
+      }, 1500);
+
+      // Mostrar mensagem e botão
+      mensagem.style.display = 'block';
+      botaoJornada.style.display = 'inline-block';
+    }
+
+    function irParaJornada() {
+      window.location.href = '/quiz';
+    }
   </script>
+
 </body>
 </html>
