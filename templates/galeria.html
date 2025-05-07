@@ -35,25 +35,30 @@
     align-items: center;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 18px;
-    padding: 20px;
+    padding: 16px;
+    margin: 8px;
+    width: 85vw;
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     backdrop-filter: blur(4px);
   }
 
   .swiper-slide img {
     width: 100%;
-    max-width: 250px;
-    border-radius: 16px;
+    max-width: 100%;
+    border-radius: 14px;
     object-fit: cover;
     margin-bottom: 10px;
   }
 
   .legenda {
     font-family: 'Segoe UI', sans-serif;
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: 500;
     color: #fff;
     text-shadow: 2px 2px 6px #000;
+    word-break: break-word;
+    max-width: 100%;
+    text-align: center;
   }
 
   .swiper-button-next, .swiper-button-prev {
@@ -86,7 +91,6 @@
     background-color: #ff3f8d;
   }
 
-  /* 🔒 Overlay de bloqueio */
   #overlay {
     position: fixed;
     top: 0;
@@ -116,9 +120,10 @@
     50% { transform: scale(1.1); }
   }
 
-  #overlay img {
-    width: 60px;
-    filter: drop-shadow(0 0 6px #fff);
+  #overlay div {
+    font-size: 64px;
+    text-shadow: 0 0 10px white;
+    animation: pulse 1.8s infinite;
   }
 
   @media (max-width: 480px) {
@@ -148,21 +153,19 @@
       margin: 10px;
     }
 
-    #overlay img {
-      width: 48px;
+    #overlay div {
+      font-size: 48px;
     }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- 🔒 Overlay inicial -->
 <div id="overlay" onclick="desbloquearMemorias()">
-  <div style="font-size: 64px; text-shadow: 0 0 10px white; animation: pulse 1.8s infinite;">🔒</div>
-  <h2>Clique para desbloquear memórias</h2>
+  <div>🔒</div>
+  <h2>Toque para desbloquear memórias...</h2>
 </div>
 
-<!-- 🎵 Música exclusiva da galeria -->
 <audio id="musica-galeria" loop>
   <source src="{% static 'musica2.mp3' %}" type="audio/mpeg">
 </audio>
