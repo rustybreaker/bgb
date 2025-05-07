@@ -47,10 +47,13 @@
   }
 
   .legenda {
-    font-size: 1.1em;
-    color: #fff;
-    text-shadow: 0 0 4px #000;
-  }
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 2px 2px 6px #000;
+}
+
 
   .swiper-button-next, .swiper-button-prev {
     color: #fff;
@@ -81,22 +84,67 @@
     transform: scale(1.05);
     background-color: #ff3f8d;
   }
+
+  /* 🔒 Overlay de bloqueio */
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  #overlay h2 {
+    font-size: 2em;
+    color: #fff;
+    text-shadow: 0 0 6px #000;
+    margin-top: 20px;
+  }
+
+
+  @keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  }
+
+
+  #overlay img {
+    width: 60px;
+    filter: drop-shadow(0 0 6px #fff);
+  }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- 🔒 Overlay inicial -->
+<div id="overlay" onclick="desbloquearMemorias()">
+    <div style="font-size: 64px; text-shadow: 0 0 10px white; animation: pulse 1.8s infinite;">🔒</div>
+  <h2>Clique para desbloquear memórias</h2>
+</div>
+
+<!-- 🎵 Música exclusiva da galeria -->
+<audio id="musica-galeria" loop>
+  <source src="{% static 'musica2.mp3' %}" type="audio/mpeg">
+</audio>
+
 <h1>Nossos momentos 💖</h1>
 
 <div class="swiper">
   <div class="swiper-wrapper">
-
     {% for item in fotos_legendas %}
       <div class="swiper-slide">
         <img src="{% static item.foto %}" alt="foto" loading="lazy" />
         <div class="legenda">{{ item.texto }}</div>
       </div>
     {% endfor %}
-
   </div>
 
   <div class="swiper-button-next"></div>
@@ -128,5 +176,21 @@
       1024: { slidesPerView: 3.5 }
     }
   });
+
+  function desbloquearMemorias() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "none";
+
+    const musica = document.getElementById("musica-galeria");
+    musica.currentTime = 0;
+    const playPromise = musica.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        document.body.addEventListener("click", () => {
+          musica.play();
+        }, { once: true });
+      });
+    }
+  }
 </script>
 {% endblock %}

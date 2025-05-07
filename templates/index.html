@@ -118,15 +118,51 @@
     <button id="botao-abrir" onclick="abrirPresente()">Abrir presente 🎁</button>
   </div>
 
-  <h1 id="mensagem" style="display: none;">Feliz Aniversário, neni! 🎂</h1>
+  <h1 id="mensagem" style="display: none;">Feliz Aniversário, neni ! 🎂</h1>
   <button id="botao-jornada" onclick="irParaJornada()">Começar nossa jornada</button>
+  
+<!-- Menu embutido -->
+<div id="menu" style="display: none; margin-top: 50px; animation: fadeIn 0.8s ease forwards;">
+  <h1 style="color: white; font-size: 2.2em; margin-bottom: 30px;">Escolha sua próxima surpresa <span style="font-size: 1.2em;">✨</span></h1>
+  <button class="botao-menu" onclick="irParaGaleria()">📸 Galeria de Momentos</button><br>
+  <button class="botao-menu" onclick="avisarQuiz()">🎮 Quiz do Amor</button><br>
+  <button class="botao-menu" onclick="avisarCartinha()">💌 Cartinha</button>
+</div>
 
+<style>
+  .botao-menu {
+    padding: 15px 25px;
+    margin: 10px 0;
+    font-size: 17px;
+    background-color: #ff5fa2;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Dancing Script', cursive;
+    animation: pulse 2.5s infinite ease-in-out;
+  }
+
+  .botao-menu:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+  
   <!-- Confetti.js -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+  
   <script>
     let coracaoInterval;
-
+  
     function abrirPresente() {
       const presente = document.getElementById('presente');
       const video = document.getElementById('video-fundo');
@@ -134,15 +170,13 @@
       const confettiCanvas = document.getElementById('confetti-canvas');
       const mensagem = document.getElementById('mensagem');
       const botaoJornada = document.getElementById('botao-jornada');
-
+  
       presente.style.display = 'none';
       video.style.display = 'block';
       confettiCanvas.style.display = 'block';
-
-      // Parar os corações
+  
       clearInterval(coracaoInterval);
-
-      // Música
+  
       musica.muted = false;
       const playPromise = musica.play();
       if (playPromise !== undefined) {
@@ -155,24 +189,35 @@
             }, { once: true });
           });
       }
-
-      // Confete
+  
       const confetti = window.confetti.create(confettiCanvas, { resize: true });
       confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
       setInterval(() => {
         confetti({ particleCount: 50, spread: 70, origin: { y: 0.4 } });
       }, 1500);
-
+  
       mensagem.style.display = 'block';
       botaoJornada.style.display = 'inline-block';
     }
-
+  
     function irParaJornada() {
-      localStorage.setItem("remover_fade", "sim");
-      window.location.href = '/menu';
+      document.getElementById('mensagem').style.display = 'none';
+      document.getElementById('botao-jornada').style.display = 'none';
+      document.getElementById('menu').style.display = 'block';
     }
-
-    // ❤️ Corações flutuantes contínuos
+  
+    function irParaGaleria() {
+      window.location.href = "/galeria/";
+    }
+  
+    function avisarQuiz() {
+      alert("Vamos primeiro ver a galeria, depois te levo pro Quiz do Amor 💕");
+    }
+  
+    function avisarCartinha() {
+      alert("A cartinha tá bloqueada!\nVocê precisa completar o Quiz do Amor primeiro 💌");
+    }
+  
     coracaoInterval = setInterval(() => {
       const coracao = document.createElement('div');
       coracao.classList.add('coracao');
@@ -182,11 +227,12 @@
       document.body.appendChild(coracao);
       setTimeout(() => coracao.remove(), 4000);
     }, 300);
-
+  
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("musica_tocando", "sim");
     });
   </script>
+  
 
 </body>
 </html>
