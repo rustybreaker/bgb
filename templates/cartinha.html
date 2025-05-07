@@ -16,6 +16,7 @@
       background: url("{% static 'papel_fundo.png' %}") no-repeat center center fixed;
       background-size: cover;
       color: #4b2e2e;
+      overflow: hidden; /* será removido via JS após desbloquear */
     }
 
     .cartinha {
@@ -28,6 +29,7 @@
       line-height: 1.7;
       font-size: 18px;
       animation: fadeIn 1.6s ease;
+      display: none;
     }
 
     h1 {
@@ -48,42 +50,85 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      color: #fff;
+      cursor: pointer;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    .overlay span {
+      font-size: 22px;
+      margin-top: 12px;
+      color: #fff6f6;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🎵 Música 4 (nova) -->
+  <!-- 🎵 Música da cartinha -->
   <audio id="musica4" loop>
     <source src="{% static 'musica4.mp3' %}" type="audio/mpeg">
   </audio>
 
-  <div class="cartinha">
-    <h1>Pra você, Bia 💖</h1>
+  <!-- 🔒 Overlay com chave -->
+  <div id="overlay" class="overlay" onclick="desbloquearCartinha()">
+    🔑
+    <span> </span>
+  </div>
+
+  <div id="cartinha" class="cartinha">
+    <h1>Pra você, meu amor! 💖</h1>
+    <p>Neni,</p>
     <p>
-      Hoje não tem presente caro, mas tem algo muito mais valioso: tempo, intenção e carinho só pra você.
+      Nesse seu aniversário, não pude dar todos presentes que você merece, mas me esforcei pra te dar algo talvez até mais valioso: tempo, carinho e dedicação só pra você!
     </p>
     <p>
-      Esse site é só uma forma de te dizer, de um jeito criativo e especial, o quanto você mudou minha vida — pra melhor, sempre.
+      Essa brincadeira com o site foi só um jeito que eu pensei em fazer pra te dizer o quanto você mudou minha vida: pra melhor, sempre! E sim, usei o nosso querido amigoGPT pra ajudar na programação, mas TODO texto foi escrito por mim, pois sei o quanto você valoriza isso!
     </p>
     <p>
-      Cada escolha que fiz desde que te conheci foi influenciada pela presença doce, firme e intensa que você tem.
-      Você me desafia, me inspira, me acalma e me faz rir como ninguém.
+      Ter escolhido você como minha parceira de vida me dá uma segurança que nunca senti antes, sempre te falo isso, mas tenho pena das pessoas que ainda não encontraram suas almas gêmeas... Deve ser muito triste...
     </p>
     <p>
-      Obrigado por ser minha parceira, minha melhor amiga, minha paz e meu caos.
-      Espero que cada detalhe aqui te faça sorrir. Você merece o mundo, e por enquanto, te dou esse cantinho só nosso. 💌
+      Eu tenho tanto orgulho da mulher que você é e vem se tornando, seja através da medicina, minha futura GO maravilhosa, pela família, o valor e dedicação que você dá pra eles, ou comigo, sendo a melhor namorada, futura esposa e mãe dos meus filhos que cada dia que passa sinto mais certeza que não existe dúvidas do nosso futuro juntos!
+    </p>
+    <p>
+      Sei que posso melhorar, não só por você, mas por nós! Melhorar minha saúde, meus estudos, minhas relações pessoais, tudo é passível de mudança, e o que me conforta é saber que tenho você ao meu lado! Pra lutar comigo nas batalhas difíceis, mas também pra celebrar nas conquistas!
+    </p>
+    <p>
+      O aniversário é seu neni, mas não vou cansar de te dizer que o presente é meu! Por ter essa deusa ao meu lado!
+    </p>
+    <p>
+      Eu te amo mais do que meu coração suporta, sou eternamente seu.
     </p>
     <p style="margin-top: 40px;">
       Com amor,<br />
-      Gui 💙
+      Gui ❤
     </p>
   </div>
 
   <script>
-    const musica = document.getElementById("musica4");
-    const play = musica.play();
-    if (play !== undefined) {
-      play.catch(() => {
+    function desbloquearCartinha() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("cartinha").style.display = "block";
+      document.body.style.overflow = "auto"; // liberar scroll
+      const musica = document.getElementById("musica4");
+
+      musica.muted = false;
+      musica.play().catch(() => {
         document.body.addEventListener("click", () => musica.play(), { once: true });
       });
     }

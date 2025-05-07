@@ -9,10 +9,12 @@
   body {
     margin: 0;
     font-family: 'Dancing Script', cursive;
-    background: url("{% static 'lovebg.png' %}") no-repeat center center fixed;
+    background: url("{% static 'lovebg.png' %}") no-repeat center center;
+    background-attachment: scroll;
     background-size: cover;
     color: #fff;
     text-align: center;
+    padding: 0 12px;
   }
 
   h1 {
@@ -47,13 +49,12 @@
   }
 
   .legenda {
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 1.2em;
-  font-weight: 500;
-  color: #fff;
-  text-shadow: 2px 2px 6px #000;
-}
-
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 2px 2px 6px #000;
+  }
 
   .swiper-button-next, .swiper-button-prev {
     color: #fff;
@@ -100,6 +101,7 @@
     flex-direction: column;
     cursor: pointer;
     text-align: center;
+    padding: 20px;
   }
 
   #overlay h2 {
@@ -109,16 +111,46 @@
     margin-top: 20px;
   }
 
-
   @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
   }
-
 
   #overlay img {
     width: 60px;
     filter: drop-shadow(0 0 6px #fff);
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.8em;
+    }
+
+    .swiper-slide {
+      padding: 12px;
+    }
+
+    .swiper-slide img {
+      max-width: 90%;
+    }
+
+    .legenda {
+      font-size: 1em;
+    }
+
+    .botao-quiz {
+      font-size: 18px;
+      padding: 12px 24px;
+    }
+
+    #overlay h2 {
+      font-size: 1.5em;
+      margin: 10px;
+    }
+
+    #overlay img {
+      width: 48px;
+    }
   }
 </style>
 {% endblock %}
@@ -126,7 +158,7 @@
 {% block content %}
 <!-- 🔒 Overlay inicial -->
 <div id="overlay" onclick="desbloquearMemorias()">
-    <div style="font-size: 64px; text-shadow: 0 0 10px white; animation: pulse 1.8s infinite;">🔒</div>
+  <div style="font-size: 64px; text-shadow: 0 0 10px white; animation: pulse 1.8s infinite;">🔒</div>
   <h2>Clique para desbloquear memórias</h2>
 </div>
 
@@ -163,8 +195,8 @@
 <script>
   const swiper = new Swiper('.swiper', {
     loop: true,
-    slidesPerView: 1.2,
-    spaceBetween: 30,
+    slidesPerView: 1.05,
+    spaceBetween: 16,
     centeredSlides: true,
     grabCursor: true,
     navigation: {
@@ -172,8 +204,9 @@
       prevEl: '.swiper-button-prev',
     },
     breakpoints: {
-      768: { slidesPerView: 2.2 },
-      1024: { slidesPerView: 3.5 }
+      480: { slidesPerView: 1.2, spaceBetween: 20 },
+      768: { slidesPerView: 2.2, spaceBetween: 30 },
+      1024: { slidesPerView: 3.5, spaceBetween: 30 }
     }
   });
 
