@@ -6,6 +6,12 @@
 {% block style %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
+  html, body {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   body {
     margin: 0;
     font-family: 'Dancing Script', cursive;
@@ -26,10 +32,18 @@
 
   .swiper {
     width: 100%;
+    max-width: 100vw;
     padding-bottom: 50px;
+    overflow: hidden;
+  }
+
+  .swiper-wrapper {
+    padding: 10px 0;
   }
 
   .swiper-slide {
+    flex-shrink: 0;
+    width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,14 +51,12 @@
     border-radius: 18px;
     padding: 16px;
     margin: 8px;
-    width: 85vw;
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     backdrop-filter: blur(4px);
   }
 
   .swiper-slide img {
     width: 100%;
-    max-width: 100%;
     border-radius: 14px;
     object-fit: cover;
     margin-bottom: 10px;
@@ -57,7 +69,6 @@
     color: #fff;
     text-shadow: 2px 2px 6px #000;
     word-break: break-word;
-    max-width: 100%;
     text-align: center;
   }
 
@@ -132,11 +143,12 @@
     }
 
     .swiper-slide {
+      width: 80vw;
       padding: 12px;
     }
 
     .swiper-slide img {
-      max-width: 90%;
+      max-width: 100%;
     }
 
     .legenda {
@@ -198,18 +210,13 @@
 <script>
   const swiper = new Swiper('.swiper', {
     loop: true,
-    slidesPerView: 1.05,
-    spaceBetween: 16,
     centeredSlides: true,
     grabCursor: true,
+    slidesPerView: 'auto',
+    spaceBetween: 16,
     navigation: {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
-    },
-    breakpoints: {
-      480: { slidesPerView: 1.2, spaceBetween: 20 },
-      768: { slidesPerView: 2.2, spaceBetween: 30 },
-      1024: { slidesPerView: 3.5, spaceBetween: 30 }
     }
   });
 
