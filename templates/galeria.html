@@ -7,8 +7,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
   html, body {
-    height: 100%;
-    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -212,11 +213,16 @@
     loop: true,
     centeredSlides: true,
     grabCursor: true,
-    slidesPerView: 'auto',
+    slidesPerView: 1.2,
     spaceBetween: 16,
     navigation: {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 'auto'
+      }
     }
   });
 
