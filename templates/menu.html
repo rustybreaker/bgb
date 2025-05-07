@@ -81,19 +81,34 @@
 
 <h1>Escolha sua próxima surpresa ✨</h1>
 
-<a href="/galeria/"><button class="botao">📷 Galeria de Momentos</button></a>
-<a href="/quiz/"><button class="botao">🎮 Quiz do Amor</button></a>
-<a href="/cartinha/"><button class="botao">💌 Cartinha</button></a>
+<button class="botao" onclick="irParaGaleria()">📷 Galeria de Momentos</button>
+<button class="botao" onclick="confirmarQuiz()">🎮 Quiz do Amor</button>
+<button class="botao" onclick="bloquearCartinha()">💌 Cartinha</button>
 {% endblock %}
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-  // Disparo contínuo de confetes no fundo
   const confettiCanvas = document.getElementById('confetti-canvas');
   const confetti = window.confetti.create(confettiCanvas, { resize: true });
+
   setInterval(() => {
     confetti({ particleCount: 40, spread: 80, origin: { y: 0.5 } });
   }, 2000);
+
+  function irParaGaleria() {
+    window.location.href = "/galeria/";
+  }
+
+  function confirmarQuiz() {
+    const confirmar = confirm("Tem certeza que quer ir pro quiz?\nQue tal ver a galeria antes? 💕");
+    if (confirmar) {
+      window.location.href = "/quiz/";
+    }
+  }
+
+  function bloquearCartinha() {
+    alert("A cartinha ainda não foi desbloqueada! 💌\nVocê precisa completar o Quiz do Amor primeiro 😉");
+  }
 </script>
 {% endblock %}

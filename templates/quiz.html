@@ -5,6 +5,17 @@
 
 {% block style %}
 <style>
+  @keyframes floatHeart {
+    0% { transform: translateY(0) scale(1); opacity: 0.9; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0px #fff; }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px #ffd700; }
+    100% { transform: scale(1); box-shadow: 0 0 0px #fff; }
+  }
+
   body {
     font-family: 'Dancing Script', cursive;
     background: url("{% static 'lovebg.png' %}") no-repeat center center fixed;
@@ -12,6 +23,7 @@
     color: #fff;
     padding: 30px;
     text-align: center;
+    overflow-x: hidden;
   }
 
   h2 {
@@ -29,7 +41,6 @@
     max-width: 600px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     backdrop-filter: blur(8px);
-    transition: 0.3s ease;
   }
 
   .pergunta h3 {
@@ -47,7 +58,8 @@
     border-radius: 10px;
     font-size: 1.1em;
     cursor: pointer;
-    color: white;
+    color: black;
+    font-weight: bold;
     transition: all 0.3s ease;
   }
 
@@ -58,8 +70,6 @@
 
   .pergunta button.certo {
     background-color: #00e676 !important;
-    color: black;
-    font-weight: bold;
   }
 
   .pergunta button.errado {
@@ -77,28 +87,49 @@
   #finalizar {
     margin-top: 30px;
     display: none;
-    padding: 12px 30px;
-    font-size: 1.3em;
+    padding: 14px 36px;
+    font-size: 1.4em;
     background-color: #ffd700;
     color: #000;
     border: none;
-    border-radius: 16px;
+    border-radius: 18px;
     cursor: pointer;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+    transition: transform 0.3s ease, background-color 0.3s ease;
   }
 
   #finalizar:hover {
-    transform: scale(1.07);
+    transform: scale(1.08);
     background-color: #fff066;
+  }
+
+  #contador-acertos {
+    font-size: 1.2em;
+    color: #ffffff;
+    margin-top: 40px;
+    text-shadow: 1px 1px 4px #000;
+  }
+
+  .cora {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center center;
+    background-size: contain;
+    animation: floatHeart linear infinite;
+    z-index: 0;
+    opacity: 0.8;
+    pointer-events: none;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<h2>Quiz: Quanto você me conhece?</h2>
+<h2>Quiz: sua brincadeira favorita! 😝</h2>
 <div id="quiz-container"></div>
+
 <a href="/cartinha/"><button id="finalizar">Ver Cartinha 💌</button></a>
+<div id="contador-acertos">Acertos: <span id="acertos">0</span> / 9</div>
 
 <audio id="audioErrado1" src="{% static 'ridiculo.opus' %}" preload="auto"></audio>
 <audio id="audioErrado2" src="{% static 'vsf.opus' %}" preload="auto"></audio>
@@ -162,6 +193,7 @@
   ];
 
   const container = document.getElementById("quiz-container");
+  const acertosDisplay = document.getElementById("acertos");
   let respostasCertas = new Array(quiz.length).fill(false);
 
   quiz.forEach((q, i) => {
@@ -180,12 +212,14 @@
         const todos = div.querySelectorAll("button");
 
         if (q.correta === "multi" || op === q.correta) {
-          respostasCertas[i] = true;
+          if (!respostasCertas[i]) {
+            respostasCertas[i] = true;
+            acertosDisplay.textContent = respostasCertas.filter(Boolean).length;
+          }
           btn.classList.add("certo");
           todos.forEach(b => b.disabled = true);
-
-          const erroAnterior = div.querySelector(".mensagem-erro");
-          if (erroAnterior) erroAnterior.remove();
+          const msg = div.querySelector(".mensagem-erro");
+          if (msg) msg.remove();
 
           if (i === quiz.length - 1 && op === "bia") {
             const a1 = document.getElementById("audioErrado1");
@@ -201,7 +235,6 @@
           checarFinalizacao();
         } else {
           btn.classList.add("errado");
-
           if (i === quiz.length - 1 && op === "bia") {
             const a1 = document.getElementById("audioErrado1");
             const a2 = document.getElementById("audioErrado2");
@@ -234,5 +267,15 @@
       document.getElementById("finalizar").style.display = "inline-block";
     }
   }
+
+  // 💖 Corações flutuantes
+  setInterval(() => {
+    const cora = document.createElement("div");
+    cora.className = "cora";
+    cora.style.left = Math.random() * 100 + "vw";
+    cora.style.animationDuration = 4 + Math.random() * 3 + "s";
+    document.body.appendChild(cora);
+    setTimeout(() => cora.remove(), 8000);
+  }, 500);
 </script>
 {% endblock %}

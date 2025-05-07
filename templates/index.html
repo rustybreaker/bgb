@@ -4,14 +4,15 @@
   {% load static %}
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Surpresa para Bia 🎁</title>
+  <title>Surpresa! 🎁</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
     body {
       margin: 0;
       font-family: 'Dancing Script', cursive;
-      background: linear-gradient(135deg, #ffe4ec, #e0bbf9);
+      background: url("{% static 'birthdaybg.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
       overflow: hidden;
       text-align: center;
     }
@@ -72,6 +73,27 @@
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+
+    /* ❤️ Corações flutuantes */
+    .coracao {
+      position: fixed;
+      font-size: 24px;
+      animation: flutuar 4s linear forwards;
+      z-index: 10;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    @keyframes flutuar {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -96,13 +118,15 @@
     <button id="botao-abrir" onclick="abrirPresente()">Abrir presente 🎁</button>
   </div>
 
-  <h1 id="mensagem" style="display: none;">Feliz Aniversário, Bia! 🎂</h1>
+  <h1 id="mensagem" style="display: none;">Feliz Aniversário, neni! 🎂</h1>
   <button id="botao-jornada" onclick="irParaJornada()">Começar nossa jornada</button>
 
   <!-- Confetti.js -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
+    let coracaoInterval;
+
     function abrirPresente() {
       const presente = document.getElementById('presente');
       const video = document.getElementById('video-fundo');
@@ -115,7 +139,10 @@
       video.style.display = 'block';
       confettiCanvas.style.display = 'block';
 
-      // Tentativa garantida de tocar música
+      // Parar os corações
+      clearInterval(coracaoInterval);
+
+      // Música
       musica.muted = false;
       const playPromise = musica.play();
       if (playPromise !== undefined) {
@@ -129,6 +156,7 @@
           });
       }
 
+      // Confete
       const confetti = window.confetti.create(confettiCanvas, { resize: true });
       confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
       setInterval(() => {
@@ -140,8 +168,20 @@
     }
 
     function irParaJornada() {
+      localStorage.setItem("remover_fade", "sim");
       window.location.href = '/menu';
     }
+
+    // ❤️ Corações flutuantes contínuos
+    coracaoInterval = setInterval(() => {
+      const coracao = document.createElement('div');
+      coracao.classList.add('coracao');
+      coracao.textContent = '❤️';
+      coracao.style.left = Math.random() * 100 + 'vw';
+      coracao.style.fontSize = (20 + Math.random() * 20) + 'px';
+      document.body.appendChild(coracao);
+      setTimeout(() => coracao.remove(), 4000);
+    }, 300);
 
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("musica_tocando", "sim");

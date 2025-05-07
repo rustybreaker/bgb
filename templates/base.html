@@ -6,7 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Surpresa pra Bia{% endblock %}</title>
 
-  <!-- Bloco para CSS extra -->
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+  <!-- Estilo Global -->
+  <style>
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
+  </style>
+
   {% block style %}{% endblock %}
 </head>
 <body>
@@ -16,7 +39,7 @@
     <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
   </audio>
 
-  <!-- Conteúdo de cada página -->
+  <!-- Conteúdo da página -->
   {% block content %}{% endblock %}
 
   <!-- Script para tocar a música uma vez e manter entre páginas -->
@@ -45,8 +68,15 @@
     });
   </script>
 
-  <!-- Bloco para JS extra -->
-  {% block script %}{% endblock %}
 
+  <script>
+    if (localStorage.getItem("remover_fade") !== "sim") {
+      document.body.classList.add("fade-in");
+    } else {
+      localStorage.removeItem("remover_fade");
+    }
+  </script>
+  
+{% block script %}{% endblock %}
 </body>
 </html>
