@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartinha pra Você 💌</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: url("{% static 'papel_fundo.png' %}") no-repeat center center fixed;
+      background-size: cover;
+      color: #4b2e2e;
+    }
+
+    .cartinha {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 40px;
+      background-color: rgba(255, 255, 240, 0.88);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      line-height: 1.7;
+      font-size: 18px;
+      animation: fadeIn 1.6s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.6em;
+      color: #a12c48;
+      text-shadow: 1px 1px 2px #fff;
+    }
+
+    p {
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Música embutida invisível, sem reiniciar -->
+  <audio id="musica" loop style="display: none">
+    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
+  </audio>
+
+  <div class="cartinha">
+    <h1>Pra você, Bia 💖</h1>
+    <p>
+      Hoje não tem presente caro, mas tem algo muito mais valioso: tempo, intenção e carinho só pra você.
+    </p>
+    <p>
+      Esse site é só uma forma de te dizer, de um jeito criativo e especial, o quanto você mudou minha vida — pra melhor, sempre.
+    </p>
+    <p>
+      Cada escolha que fiz desde que te conheci foi influenciada pela presença doce, firme e intensa que você tem.
+      Você me desafia, me inspira, me acalma e me faz rir como ninguém.
+    </p>
+    <p>
+      Obrigado por ser minha parceira, minha melhor amiga, minha paz e meu caos.
+      Espero que cada detalhe aqui te faça sorrir. Você merece o mundo, e por enquanto, te dou esse cantinho só nosso. 💌
+    </p>
+    <p style="margin-top: 40px;">
+      Com amor,<br />
+      Gui 💙
+    </p>
+  </div>
+
+  <script>
+    const musica = document.getElementById("musica");
+    const tocando = localStorage.getItem("musica_tocando");
+
+    if (tocando !== "sim") {
+      musica.play();
+      localStorage.setItem("musica_tocando", "sim");
+    }
+
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("musica_tocando", "sim");
+    });
+  </script>
+
+</body>
+</html>

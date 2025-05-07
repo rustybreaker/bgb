@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nossa Galeria 💞</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Dancing Script', cursive;
+      background: radial-gradient(circle at center, #fff0f5, #ffe2d1);
+      color: #4a2c2c;
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #d6336c;
+    }
+
+    .moment {
+      margin: 40px 0;
+    }
+
+    .moment img, .moment video {
+      width: 90%;
+      max-width: 420px;
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .moment img:hover, .moment video:hover {
+      transform: scale(1.02);
+    }
+
+    .desc {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #6b2e3f;
+    }
+
+    .easter-egg {
+      margin-top: 8px;
+      font-size: 1em;
+      color: #ff5fa2;
+      cursor: pointer;
+      text-decoration: underline dotted;
+    }
+
+    .hidden {
+      display: none;
+      margin-top: 10px;
+      font-size: 1em;
+      color: #aa2e5c;
+    }
+
+    .back-button {
+      margin-top: 50px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      color: white;
+      background-color: #ff5fa2;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 18px;
+      display: inline-block;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="musica" loop>
+    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
+  </audio>
+
+  <h1>Nossos Momentos 💞</h1>
+
+  <div class="moment">
+    <img src="{% static 'juntos1.JPEG' %}" alt="">
+    <div class="desc">Nosso primeiro ano novo juntos ✨</div>
+  </div>
+
+  <div class="moment">
+    <video controls muted>
+      <source src="{% static 'cabelo.MOV' %}" type="video/mp4">
+    </video>
+    <div class="desc">Você me deixou cuidar do seu cabelo. Que confiança! 😍</div>
+    <div class="easter-egg" onclick="toggle('egg1')">Clique aqui... 👀</div>
+    <div id="egg1" class="hidden">Esse momento podia ter virado um salão chamado "Gui & Bia Hair Spa" 😂</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'click1.JPEG' %}" alt="">
+    <div class="desc">Você sem saber que tava linda (como sempre)</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'ia_gravida.JPG' %}" alt="">
+    <div class="desc">E se o futuro vier assim? 🤰</div>
+    <div class="easter-egg" onclick="toggle('egg2')">Será que já é hora de um quiz?</div>
+    <div id="egg2" class="hidden"><a href="/quiz/">Clica aqui se quiser descobrir... 💘</a></div>
+  </div>
+
+  <div class="moment">
+    <video controls muted>
+      <source src="{% static 'video_dance.mp4' %}" type="video/mp4">
+    </video>
+    <div class="desc">Sim, você dançando bêbada é meu clipe favorito 🕺💃</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'joao1.JPEG' %}" alt="">
+    <div class="desc">Você e o Joãozinho — dupla dinâmica 💙</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'dogpool.jpg' %}" alt="">
+    <div class="desc">Nenipool: O herói que o mundo não sabia que precisava 🐶🔥</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'rest3.JPEG' %}" alt="">
+    <div class="desc">Nosso date no japonês 🍣</div>
+  </div>
+
+  <div class="moment">
+    <img src="{% static 'ia_casamento1.JPG' %}" alt="">
+    <div class="desc">Spoiler de casamento? Eu apoio! 💍</div>
+  </div>
+
+  <div class="moment">
+    <video controls muted>
+      <source src="{% static 'ridiculo.opus' %}" type="audio/ogg">
+    </video>
+    <div class="desc">"Seu ridículo" — e mesmo assim eu fiquei 😅</div>
+  </div>
+
+  <div class="back-button">
+    <a href="/menu">← Voltar para o menu</a>
+  </div>
+
+  <script>
+    const musica = document.getElementById("musica");
+    const tocando = localStorage.getItem("musica_tocando");
+
+    if (tocando !== "sim") {
+      musica.play().catch(() => {
+        document.body.addEventListener("click", () => musica.play(), { once: true });
+      });
+      localStorage.setItem("musica_tocando", "sim");
+    }
+
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle("hidden");
+    }
+  </script>
+
+</body>
+</html>

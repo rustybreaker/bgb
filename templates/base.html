@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Surpresa pra Bia{% endblock %}</title>
+  {% block style %}{% endblock %}
+</head>
+<body>
+
+  <!-- 🎵 Player invisível compartilhado -->
+  <audio id="musica-global" loop>
+    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
+  </audio>
+
+  {% block content %}{% endblock %}
+
+  <script>
+    const musica = document.getElementById("musica-global");
+    const tocando = localStorage.getItem("musica_tocando");
+
+    if (tocando !== "sim") {
+      musica.play();
+      localStorage.setItem("musica_tocando", "sim");
+    }
+
+    // Garante que não pause ao navegar
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("musica_tocando", "sim");
+    });
+  </script>
+
+  {% block script %}{% endblock %}
+
+</body>
+</html>

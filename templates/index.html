@@ -6,10 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Surpresa para Bia 🎁</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
     body {
       margin: 0;
-      font-family: sans-serif;
-      background: linear-gradient(to bottom, #fff0f5, #ffe3e3);
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(135deg, #ffe4ec, #e0bbf9);
       overflow: hidden;
       text-align: center;
     }
@@ -27,11 +29,13 @@
 
     .presente {
       margin-top: 20vh;
+      animation: pulse 2s infinite;
     }
 
     .presente img {
       width: 200px;
       transition: transform 0.8s ease;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
     }
 
     #botao-abrir, #botao-jornada {
@@ -40,9 +44,16 @@
       background-color: #ff5fa2;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    #botao-abrir:hover, #botao-jornada:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
     }
 
     #botao-jornada {
@@ -51,7 +62,15 @@
 
     h1 {
       margin-top: 40px;
-      font-size: 2.2em;
+      font-size: 2.4em;
+      color: #ffffff;
+      text-shadow: 1px 1px 3px #00000040;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -92,37 +111,41 @@
       const mensagem = document.getElementById('mensagem');
       const botaoJornada = document.getElementById('botao-jornada');
 
-      // Esconde a caixa de presente inteira
       presente.style.display = 'none';
-
-      // Ativar vídeo e música
       video.style.display = 'block';
       confettiCanvas.style.display = 'block';
-      musica.play();
 
-      // Confete contínuo
+      // Tentativa garantida de tocar música
+      musica.muted = false;
+      const playPromise = musica.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => localStorage.setItem("musica_tocando", "sim"))
+          .catch(() => {
+            document.body.addEventListener("click", () => {
+              musica.play();
+              localStorage.setItem("musica_tocando", "sim");
+            }, { once: true });
+          });
+      }
+
       const confetti = window.confetti.create(confettiCanvas, { resize: true });
-      confetti({
-        particleCount: 100,
-        spread: 80,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
       setInterval(() => {
-        confetti({
-          particleCount: 50,
-          spread: 70,
-          origin: { y: 0.4 }
-        });
+        confetti({ particleCount: 50, spread: 70, origin: { y: 0.4 } });
       }, 1500);
 
-      // Mostrar mensagem e botão
       mensagem.style.display = 'block';
       botaoJornada.style.display = 'inline-block';
     }
 
     function irParaJornada() {
-      window.location.href = '/quiz';
+      window.location.href = '/menu';
     }
+
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("musica_tocando", "sim");
+    });
   </script>
 
 </body>
