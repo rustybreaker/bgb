@@ -5,32 +5,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Surpresa pra Bia{% endblock %}</title>
+
+  <!-- Bloco para CSS extra -->
   {% block style %}{% endblock %}
 </head>
 <body>
 
-  <!-- 🎵 Player invisível compartilhado -->
+  <!-- 🎵 Música global (não reinicia entre páginas) -->
   <audio id="musica-global" loop>
     <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
   </audio>
 
+  <!-- Conteúdo de cada página -->
   {% block content %}{% endblock %}
 
+  <!-- Script para tocar a música uma vez e manter entre páginas -->
   <script>
     const musica = document.getElementById("musica-global");
     const tocando = localStorage.getItem("musica_tocando");
 
     if (tocando !== "sim") {
-      musica.play();
-      localStorage.setItem("musica_tocando", "sim");
+      musica.muted = false;
+      const play = musica.play();
+
+      if (play !== undefined) {
+        play
+          .then(() => localStorage.setItem("musica_tocando", "sim"))
+          .catch(() => {
+            document.body.addEventListener("click", () => {
+              musica.play();
+              localStorage.setItem("musica_tocando", "sim");
+            }, { once: true });
+          });
+      }
     }
 
-    // Garante que não pause ao navegar
     window.addEventListener("beforeunload", () => {
       localStorage.setItem("musica_tocando", "sim");
     });
   </script>
 
+  <!-- Bloco para JS extra -->
   {% block script %}{% endblock %}
 
 </body>

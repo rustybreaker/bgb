@@ -1,93 +1,99 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  {% load static %}
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Escolha sua próxima surpresa</title>
+{% extends "base.html" %}
+{% load static %}
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+{% block title %}Escolha sua próxima surpresa ✨{% endblock %}
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Dancing Script', cursive;
-      background: radial-gradient(circle at center, #fff0f5, #ffdbe6, #ffe2d1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      animation: fadeIn 1s ease;
-    }
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Dancing Script', cursive;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    position: relative;
+  }
 
-    h1 {
-      margin-bottom: 30px;
-      font-size: 2.4em;
-      color: #c63566;
-      text-shadow: 1px 1px 3px #fff;
-    }
+  #video-fundo, #confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
 
-    .botao {
-      display: block;
-      width: 80%;
-      max-width: 280px;
-      padding: 18px;
-      margin: 12px;
-      background-color: #ff5fa2;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      animation: pulse 2.5s infinite ease-in-out;
-    }
+  h1 {
+    margin-bottom: 30px;
+    font-size: 2.4em;
+    color: #fff;
+    text-shadow: 2px 2px 6px #00000066;
+    z-index: 1;
+  }
 
-    .botao:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
+  .botao {
+    display: block;
+    width: 80%;
+    max-width: 280px;
+    padding: 18px;
+    margin: 12px;
+    background-color: #ff5fa2;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: pulse 2.5s infinite ease-in-out;
+    z-index: 1;
+  }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
+  .botao:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body>
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
 
-  <!-- Música invisível (não reinicia) -->
-  <audio id="musica" loop style="display: none">
-    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
-  </audio>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+{% endblock %}
 
-  <h1>Escolha sua próxima surpresa ✨</h1>
+{% block content %}
+<video id="video-fundo" autoplay loop muted playsinline>
+  <source src="{% static 'video_dance.mp4' %}" type="video/mp4">
+</video>
 
-  <a href="/galeria/"><button class="botao">📷 Galeria de Momentos</button></a>
-  <a href="/quiz/"><button class="botao">🎮 Quiz do Amor</button></a>
-  <a href="/cartinha/"><button class="botao">💌 Cartinha</button></a>
+<canvas id="confetti-canvas"></canvas>
 
-  <script>
-    const musica = document.getElementById("musica");
-    const tocando = localStorage.getItem("musica_tocando");
+<h1>Escolha sua próxima surpresa ✨</h1>
 
-    if (tocando !== "sim") {
-      musica.play();
-      localStorage.setItem("musica_tocando", "sim");
-    }
+<a href="/galeria/"><button class="botao">📷 Galeria de Momentos</button></a>
+<a href="/quiz/"><button class="botao">🎮 Quiz do Amor</button></a>
+<a href="/cartinha/"><button class="botao">💌 Cartinha</button></a>
+{% endblock %}
 
-    window.addEventListener("beforeunload", () => {
-      localStorage.setItem("musica_tocando", "sim");
-    });
-  </script>
-
-</body>
-</html>
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  // Disparo contínuo de confetes no fundo
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const confetti = window.confetti.create(confettiCanvas, { resize: true });
+  setInterval(() => {
+    confetti({ particleCount: 40, spread: 80, origin: { y: 0.5 } });
+  }, 2000);
+</script>
+{% endblock %}

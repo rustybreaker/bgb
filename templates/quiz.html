@@ -1,15 +1,221 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head><meta charset="UTF-8"><title>Quiz do Amor</title></head>
-<body>
-  <h2>Quiz: Quanto você me conhece?</h2>
-  <p>Pergunta 1: Qual foi nosso primeiro filme juntos?</p>
-  <ul>
-    <li>La La Land</li>
-    <li>Interestelar</li>
-    <li>Shrek</li>
-    <li>Não lembro 😅</li>
-  </ul>
-  <a href="/final"><button>Finalizar</button></a>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Quiz da Neni{% endblock %}
+
+{% block style %}
+<style>
+  body {
+    font-family: 'Dancing Script', cursive;
+    background: url("{% static 'lovebg.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    padding: 30px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 2.4em;
+    margin-bottom: 20px;
+    color: #ffcbe6;
+    text-shadow: 1px 1px 3px #000;
+  }
+
+  .pergunta {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 18px;
+    max-width: 600px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
+    transition: 0.3s ease;
+  }
+
+  .pergunta h3 {
+    margin-bottom: 10px;
+    color: #fff2f9;
+    text-shadow: 0 0 5px #000;
+  }
+
+  .pergunta button {
+    display: block;
+    margin: 8px auto;
+    padding: 10px 20px;
+    background: #ff8fb3;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .pergunta button:hover {
+    background: #ff5c96;
+    transform: scale(1.05);
+  }
+
+  .pergunta button.certo {
+    background-color: #00c853 !important;
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  .pergunta button.errado {
+    background-color: #d50000 !important;
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  .mensagem-erro {
+    color: #ffaaaa;
+    font-weight: bold;
+    margin-top: 10px;
+    text-shadow: 0 0 4px #000;
+  }
+
+  #finalizar {
+    margin-top: 30px;
+    display: none;
+    padding: 12px 30px;
+    font-size: 1.3em;
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+
+  #finalizar:hover {
+    transform: scale(1.07);
+    background-color: #ffe866;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Quiz: Quanto você me conhece?</h2>
+<div id="quiz-container"></div>
+<a href="/cartinha/"><button id="finalizar">Ver Cartinha 💌</button></a>
+
+<audio id="audioErrado1" src="{% static 'ridiculo.opus' %}" preload="auto"></audio>
+<audio id="audioErrado2" src="{% static 'vsf.opus' %}" preload="auto"></audio>
+{% endblock %}
+
+{% block script %}
+<script>
+  const quiz = [
+    {
+      pergunta: "Se a gente fosse ver um filme, quem dormiria primeiro?",
+      opcoes: ["Gui", "Bia", "Niet", "Maria"],
+      correta: "Bia"
+    },
+    {
+      pergunta: "Quem é mais provável de esquecer algo?",
+      opcoes: ["Gui", "Bia", "Dona Cida", "Senhor Batata"],
+      correta: "Gui"
+    },
+    {
+      pergunta: "Se eu desaparecesse, onde você me procuraria primeiro?",
+      opcoes: ["No banheiro", "Na cama usando o celular", "Na cozinha", "Num portal que é ativado quando voce poe o dedo no seu 👌🏻"],
+      correta: "Num portal que é ativado quando voce poe o dedo no seu 👌🏻"
+    },
+    {
+      pergunta: "Qual pet seria mais provável de dominar o mundo?",
+      opcoes: ["Niet", "Belinha", "Zatar", "Todos juntos em aliança secreta"],
+      correta: "Niet"
+    },
+    {
+      pergunta: "O que eu mais amo em você?",
+      opcoes: ["Seu coração", "Seu humor", "Seu bundão", "Tudo junto, não tem como escolher"],
+      correta: "multi"
+    },
+    {
+      pergunta: "O que mais representa nosso amor?",
+      opcoes: ["Um irritando o outro", "Um sexo selvagem", "Um abraço apertado", "Um meme enviado no instagram"],
+      correta: "multi"
+    },
+    {
+      pergunta: "O que seria menos provável de acontecer num sábado à noite?",
+      opcoes: ["Maria dormindo cedo", "A gente indo pra balada", "Voce decidir dar o 👌🏻", "Eu ir na academia"],
+      correta: "multi"
+    },
+    {
+      pergunta: "Se aparecesse um alien na sala, o que faríamos?",
+      opcoes: ["Niet mataria ele na porrada", "Voce se cagaria (literalmente) de medo", "Ele diz que o unico jeito de me salvar é voce dar o 👌🏻, eu morro em seguida", "Você tentaria conversar com ele com seu ingles fluente"],
+      correta: "Ele diz que o unico jeito de me salvar é voce dar o 👌🏻, eu morro em seguida"
+    },
+    {
+      pergunta: "E a mais importante de todas: quem ama mais?",
+      opcoes: ["gui", "bia"],
+      correta: "gui"
+    }
+  ];
+
+  const mensagensErradas = [
+    "Tem certeza? 😏", 
+    "Acho que não...", 
+    "Você não gosta de errar... mas errou", 
+    "Hmmmm, tenta de novo 🤨"
+  ];
+
+  const container = document.getElementById("quiz-container");
+  let respostasCertas = new Array(quiz.length).fill(false);
+
+  quiz.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "pergunta";
+
+    const h3 = document.createElement("h3");
+    h3.innerText = q.pergunta;
+    div.appendChild(h3);
+
+    q.opcoes.forEach(op => {
+      const btn = document.createElement("button");
+      btn.innerText = op;
+
+      btn.onclick = () => {
+        const todos = div.querySelectorAll("button");
+
+        if (q.correta === "multi" || op === q.correta) {
+          respostasCertas[i] = true;
+          btn.classList.add("certo");
+          todos.forEach(b => b.disabled = true);
+
+          const erroAnterior = div.querySelector(".mensagem-erro");
+          if (erroAnterior) erroAnterior.remove();
+
+          if (i === quiz.length - 1 && op === "bia") {
+            document.getElementById("audioErrado1").play();
+            setTimeout(() => document.getElementById("audioErrado2").play(), 1300);
+          }
+
+          checarFinalizacao();
+        } else {
+          btn.classList.add("errado");
+          const existente = div.querySelector(".mensagem-erro");
+          if (!existente) {
+            const msg = document.createElement("div");
+            msg.className = "mensagem-erro";
+            msg.innerText = mensagensErradas[Math.floor(Math.random() * mensagensErradas.length)];
+            div.appendChild(msg);
+          }
+        }
+      };
+
+      div.appendChild(btn);
+    });
+
+    container.appendChild(div);
+  });
+
+  function checarFinalizacao() {
+    if (respostasCertas.every(r => r)) {
+      document.getElementById("finalizar").style.display = "inline-block";
+    }
+  }
+</script>
+{% endblock %}

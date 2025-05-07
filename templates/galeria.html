@@ -1,171 +1,132 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  {% load static %}
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nossa Galeria 💞</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Dancing Script', cursive;
-      background: radial-gradient(circle at center, #fff0f5, #ffe2d1);
-      color: #4a2c2c;
-      text-align: center;
-      padding: 30px 10px;
-    }
+{% extends "base.html" %}
+{% load static %}
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      color: #d6336c;
-    }
+{% block title %}Galeria de Momentos{% endblock %}
 
-    .moment {
-      margin: 40px 0;
-    }
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+  body {
+    margin: 0;
+    font-family: 'Dancing Script', cursive;
+    background: url("{% static 'lovebg.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+  }
 
-    .moment img, .moment video {
-      width: 90%;
-      max-width: 420px;
-      border-radius: 16px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
-    }
+  h1 {
+    margin: 24px 0 8px;
+    font-size: 2.4em;
+    color: #fff;
+    text-shadow: 1px 1px 4px #000;
+  }
 
-    .moment img:hover, .moment video:hover {
-      transform: scale(1.02);
-    }
+  .swiper {
+    width: 100%;
+    padding-bottom: 50px;
+  }
 
-    .desc {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #6b2e3f;
-    }
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+  }
 
-    .easter-egg {
-      margin-top: 8px;
-      font-size: 1em;
-      color: #ff5fa2;
-      cursor: pointer;
-      text-decoration: underline dotted;
-    }
+  .swiper-slide img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
 
-    .hidden {
-      display: none;
-      margin-top: 10px;
-      font-size: 1em;
-      color: #aa2e5c;
-    }
+  .legenda {
+    font-size: 1.1em;
+    color: #fff;
+    text-shadow: 0 0 4px #000;
+  }
 
-    .back-button {
-      margin-top: 50px;
-    }
+  .swiper-button-next, .swiper-button-prev {
+    color: #fff;
+    filter: drop-shadow(0 0 4px #000);
+  }
 
-    .back-button a {
-      text-decoration: none;
-      color: white;
-      background-color: #ff5fa2;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 18px;
-      display: inline-block;
-    }
+  .aviso {
+    margin-top: 10px;
+    font-size: 1em;
+    color: #ffccdd;
+    text-shadow: 0 0 2px #000;
+  }
 
-    audio {
-      display: none;
-    }
-  </style>
-</head>
-<body>
+  .botao-quiz {
+    margin: 40px auto 20px;
+    padding: 14px 30px;
+    background-color: #ff5fa2;
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+  }
 
-  <audio id="musica" loop>
-    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
-  </audio>
+  .botao-quiz:hover {
+    transform: scale(1.05);
+    background-color: #ff3f8d;
+  }
+</style>
+{% endblock %}
 
-  <h1>Nossos Momentos 💞</h1>
+{% block content %}
+<h1>Nossos momentos 💖</h1>
 
-  <div class="moment">
-    <img src="{% static 'juntos1.JPEG' %}" alt="">
-    <div class="desc">Nosso primeiro ano novo juntos ✨</div>
+<div class="swiper">
+  <div class="swiper-wrapper">
+
+    {% for item in fotos_legendas %}
+      <div class="swiper-slide">
+        <img src="{% static item.foto %}" alt="foto" loading="lazy" />
+        <div class="legenda">{{ item.texto }}</div>
+      </div>
+    {% endfor %}
+
   </div>
 
-  <div class="moment">
-    <video controls muted>
-      <source src="{% static 'cabelo.MOV' %}" type="video/mp4">
-    </video>
-    <div class="desc">Você me deixou cuidar do seu cabelo. Que confiança! 😍</div>
-    <div class="easter-egg" onclick="toggle('egg1')">Clique aqui... 👀</div>
-    <div id="egg1" class="hidden">Esse momento podia ter virado um salão chamado "Gui & Bia Hair Spa" 😂</div>
-  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
 
-  <div class="moment">
-    <img src="{% static 'click1.JPEG' %}" alt="">
-    <div class="desc">Você sem saber que tava linda (como sempre)</div>
-  </div>
+<p class="aviso">Deslize ou toque para navegar 💕</p>
 
-  <div class="moment">
-    <img src="{% static 'ia_gravida.JPG' %}" alt="">
-    <div class="desc">E se o futuro vier assim? 🤰</div>
-    <div class="easter-egg" onclick="toggle('egg2')">Será que já é hora de um quiz?</div>
-    <div id="egg2" class="hidden"><a href="/quiz/">Clica aqui se quiser descobrir... 💘</a></div>
-  </div>
+<a href="/quiz/">
+  <button class="botao-quiz">Liberar a cartinha 💌</button>
+</a>
+{% endblock %}
 
-  <div class="moment">
-    <video controls muted>
-      <source src="{% static 'video_dance.mp4' %}" type="video/mp4">
-    </video>
-    <div class="desc">Sim, você dançando bêbada é meu clipe favorito 🕺💃</div>
-  </div>
-
-  <div class="moment">
-    <img src="{% static 'joao1.JPEG' %}" alt="">
-    <div class="desc">Você e o Joãozinho — dupla dinâmica 💙</div>
-  </div>
-
-  <div class="moment">
-    <img src="{% static 'dogpool.jpg' %}" alt="">
-    <div class="desc">Nenipool: O herói que o mundo não sabia que precisava 🐶🔥</div>
-  </div>
-
-  <div class="moment">
-    <img src="{% static 'rest3.JPEG' %}" alt="">
-    <div class="desc">Nosso date no japonês 🍣</div>
-  </div>
-
-  <div class="moment">
-    <img src="{% static 'ia_casamento1.JPG' %}" alt="">
-    <div class="desc">Spoiler de casamento? Eu apoio! 💍</div>
-  </div>
-
-  <div class="moment">
-    <video controls muted>
-      <source src="{% static 'ridiculo.opus' %}" type="audio/ogg">
-    </video>
-    <div class="desc">"Seu ridículo" — e mesmo assim eu fiquei 😅</div>
-  </div>
-
-  <div class="back-button">
-    <a href="/menu">← Voltar para o menu</a>
-  </div>
-
-  <script>
-    const musica = document.getElementById("musica");
-    const tocando = localStorage.getItem("musica_tocando");
-
-    if (tocando !== "sim") {
-      musica.play().catch(() => {
-        document.body.addEventListener("click", () => musica.play(), { once: true });
-      });
-      localStorage.setItem("musica_tocando", "sim");
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper('.swiper', {
+    loop: true,
+    slidesPerView: 1.2,
+    spaceBetween: 30,
+    centeredSlides: true,
+    grabCursor: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      768: { slidesPerView: 2.2 },
+      1024: { slidesPerView: 3.5 }
     }
-
-    function toggle(id) {
-      const el = document.getElementById(id);
-      el.classList.toggle("hidden");
-    }
-  </script>
-
-</body>
-</html>
+  });
+</script>
+{% endblock %}
