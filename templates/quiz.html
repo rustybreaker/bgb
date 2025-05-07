@@ -34,6 +34,11 @@
   }
 
   .pergunta {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 2px 2px 6px #000;
     background: rgba(0, 0, 0, 0.4);
     margin: 20px auto;
     padding: 20px;
@@ -133,6 +138,12 @@
 
 <audio id="audioErrado1" src="{% static 'ridiculo.opus' %}" preload="auto"></audio>
 <audio id="audioErrado2" src="{% static 'vsf.opus' %}" preload="auto"></audio>
+
+<audio id="musica3" loop>
+    <source src="{% static 'musica3.mp3' %}" type="audio/mpeg">
+  </audio>
+  
+
 {% endblock %}
 
 {% block script %}
@@ -278,4 +289,17 @@
     setTimeout(() => cora.remove(), 8000);
   }, 500);
 </script>
+<script>
+    // 🎵 Tocar musica3.mp3
+    const musica3 = document.getElementById("musica3");
+    musica3.currentTime = 0;
+    const playMusica = musica3.play();
+    if (playMusica !== undefined) {
+      playMusica.catch(() => {
+        document.body.addEventListener("click", () => musica3.play(), { once: true });
+      });
+    }
+  </script>
+  
+
 {% endblock %}

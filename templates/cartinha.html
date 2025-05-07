@@ -52,9 +52,9 @@
 </head>
 <body>
 
-  <!-- Música embutida invisível, sem reiniciar -->
-  <audio id="musica" loop style="display: none">
-    <source src="{% static 'musica.mp3' %}" type="audio/mpeg">
+  <!-- 🎵 Música 4 (nova) -->
+  <audio id="musica4" loop>
+    <source src="{% static 'musica4.mp3' %}" type="audio/mpeg">
   </audio>
 
   <div class="cartinha">
@@ -80,17 +80,13 @@
   </div>
 
   <script>
-    const musica = document.getElementById("musica");
-    const tocando = localStorage.getItem("musica_tocando");
-
-    if (tocando !== "sim") {
-      musica.play();
-      localStorage.setItem("musica_tocando", "sim");
+    const musica = document.getElementById("musica4");
+    const play = musica.play();
+    if (play !== undefined) {
+      play.catch(() => {
+        document.body.addEventListener("click", () => musica.play(), { once: true });
+      });
     }
-
-    window.addEventListener("beforeunload", () => {
-      localStorage.setItem("musica_tocando", "sim");
-    });
   </script>
 
 </body>
